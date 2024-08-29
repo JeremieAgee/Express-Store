@@ -10,7 +10,7 @@ const cors = require("cors");
 // Import Axios
 const axios = require("axios");
 
-// import our Supabase instance
+// Import our Supabase instance
 const supabase = require("./supabaseInstance");
 
 // create an express application
@@ -20,6 +20,7 @@ const Store = require("./utils/Store");
 const Beverage = require("./utils/Beverage");
 const Snack = require("./utils/Snack");
 const onlineShop = new Store(`Jeremie's Store`);
+
 // define a port
 const PORT = 4000;
 async function setStore(){
@@ -39,14 +40,16 @@ async function setStore(){
         console.log(`Error loading database${err}`);
     }
 }
+
+// Call the function to set store.
 setStore();
+
 // Define our Middleware
 // Use CORS Middleware
 app.use(cors());
 
 // Use JSON middleware to parse request bodies
 app.use(express.json());
-
 
 // Define our Routes
 // Home Route
@@ -100,9 +103,10 @@ app.post("/snacks", (req, res, next) => {
 app.put("/snacks/:id", (req, res, next) => {
     try {
         // destructure our request.body object so we can store the fields in variables
-        const {name, description, price, catagory, inStock, count} = req.body
+        const {name, description, price, catagory, inStock, count} = req.body;
         const thisId = req.params.id;
-        const updatedSnack = new Snack(thisId, name, description, price, catagory, inStock, count)
+        const updatedSnack = new Snack(thisId, name, description, price, catagory, inStock, count);
+
         // error handling if request doesn't send all fields necessary
         if (!name || !description || !price || !catagory || !inStock || !count) {
           return res
@@ -116,6 +120,17 @@ app.put("/snacks/:id", (req, res, next) => {
       } catch (err) {
         next(err);
       }
+});
+
+app.delete("/snacks/:id", (req, res, next)=>{
+  try{
+    const thisId = req.params.id;
+    supabase.delete("/snacks?id=eq."+ thisId);
+    res.json({message: `The snack with ${thisId}`});
+    onlineShop.removeSnack(thisId);
+  }catch(err){
+    next(err)
+  }
 });
 
 // Error Handling
