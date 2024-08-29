@@ -7,9 +7,6 @@ const express = require("express");
 // Import CORS
 const cors = require("cors");
 
-// Import Axios
-const axios = require("axios");
-
 // Import our Supabase instance
 const supabase = require("./supabaseInstance");
 
@@ -23,22 +20,22 @@ const onlineShop = new Store(`Jeremie's Store`);
 
 // define a port
 const PORT = 4000;
-async function setStore(){
-    try{
+async function setStore() {
+  try {
     const snacks = await supabase.get("/snacks");
-    const newSnacks = snacks.data.map((snack)=>{
-        return new Snack(snack.id, snack.name, snack.description, snack.price, snack.catagory, snack.inStock, snack.count)
+    const newSnacks = snacks.data.map((snack) => {
+      return new Snack(snack.id, snack.name, snack.description, snack.price, snack.catagory, snack.inStock, snack.count)
     })
     onlineShop.setSnacks(newSnacks);
     const beverages = await supabase.get("/beverages");
-    const newBeverages = beverages.data.map((beverage)=>{
-        return new Beverage(beverage.id, beverage.name, beverage.description, beverage.price, beverage.catagory, beverage.inStock, beverage.count)
+    const newBeverages = beverages.data.map((beverage) => {
+      return new Beverage(beverage.id, beverage.name, beverage.description, beverage.price, beverage.catagory, beverage.inStock, beverage.count)
     })
     onlineShop.setBeverages(newBeverages);
     console.log(`Store set with database`);
-    }catch(err){
-        console.log(`Error loading database${err}`);
-    }
+  } catch (err) {
+    console.log(`Error loading database${err}`);
+  }
 }
 
 // Call the function to set store.
@@ -79,18 +76,18 @@ app.get("/snacks/:id", (req, res, next) => {
 app.post("/snacks", (req, res, next) => {
   try {
     // destructure our request.body object so we can store the fields in variables
-    const {name, description, price, catagory, inStock, count} = req.body
+    const { name, description, price, catagory, inStock, count } = req.body
 
     // error handling if request doesn't send all fields necessary
     if (!name || !description || !price || !catagory) {
-        console.log(req.body)
+      console.log(req.body)
       return res
         .status(400)
         .json({ message: "Missing required fields!!" });
     } else {
-        const newSnack = new Snack(onlineShop.snacks.length+1, name, description, price, catagory, inStock , count)
-        supabase.post("/snacks", newSnack);
-        onlineShop.snacks.push(newSnack)
+      const newSnack = new Snack(onlineShop.snacks.length + 1, name, description, price, catagory, inStock, count)
+      supabase.post("/snacks", newSnack);
+      onlineShop.snacks.push(newSnack)
     }
     // send a response of the added data
     res.status(201).json(onlineStore.snacks[onlineStore.snacks.length]);
@@ -99,36 +96,37 @@ app.post("/snacks", (req, res, next) => {
   }
 });
 
-// Route to update a beverage
+// Route to update a snack
 app.put("/snacks/:id", (req, res, next) => {
-    try {
-        // destructure our request.body object so we can store the fields in variables
-        const {name, description, price, catagory, inStock, count} = req.body;
-        const thisId = req.params.id;
-        const updatedSnack = new Snack(thisId, name, description, price, catagory, inStock, count);
+  try {
+    // destructure our request.body object so we can store the fields in variables
+    const { name, description, price, catagory, inStock, count } = req.body;
+    const thisId = req.params.id;
+    const updatedSnack = new Snack(thisId, name, description, price, catagory, inStock, count);
 
-        // error handling if request doesn't send all fields necessary
-        if (!name || !description || !price || !catagory || !inStock || !count) {
-          return res
-            .status(400)
-            .json({ message: "Missing required fields!!" });
-        } else {
-            supabase.put("/snacks?id=eq."+thisId, updatedSnack);
-            onlineShop.updateSnack(thisId, updatedSnack);
-        }
-        res.json(onlineShop.findSnack(thisId));
-      } catch (err) {
-        next(err);
-      }
+    // error handling if request doesn't send all fields necessary
+    if (!name || !description || !price || !catagory || !inStock || !count) {
+      return res
+        .status(400)
+        .json({ message: "Missing required fields!!" });
+    } else {
+      supabase.put("/snacks?id=eq." + thisId, updatedSnack);
+      onlineShop.updateSnack(thisId, updatedSnack);
+    }
+    res.json(onlineShop.findSnack(thisId));
+  } catch (err) {
+    next(err);
+  }
 });
 
-app.delete("/snacks/:id", (req, res, next)=>{
-  try{
+//Route to remove Snack
+app.delete("/snacks/:id", (req, res, next) => {
+  try {
     const thisId = req.params.id;
-    supabase.delete("/snacks?id=eq."+ thisId);
-    res.json({message: `The snack with ${thisId}`});
+    supabase.delete("/snacks?id=eq." + thisId);
+    res.json({ message: `The snack with ${thisId}` });
     onlineShop.removeSnack(thisId);
-  }catch(err){
+  } catch (err) {
     next(err)
   }
 });
