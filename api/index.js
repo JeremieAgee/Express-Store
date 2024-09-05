@@ -1,14 +1,9 @@
-// Import Dotenv
-require("dotenv").config();
 
-// Import Express
-const express = require("express");
-
-// Import CORS
+const express = require('express')// Import CORS
 const cors = require("cors");
 
 // Import our Supabase instance
-const supabase = require("./supabaseInstance");
+const supabase = require("../supabaseInstance");
 
 // create an express application
 const app = express();
@@ -17,9 +12,10 @@ const app = express();
 These classes help maintain project structure.
 They also store all the data from the database without a constant connection
 */
-const Store = require("./utils/Store");
-const Beverage = require("./utils/Beverage");
-const Snack = require("./utils/Snack");
+const Store = require("../utils/Store");
+const Beverage = require("../utils/Beverage");
+const Snack = require("../utils/Snack");
+
 // Intitalize the shop class
 const onlineShop = new Store(`Jeremie's Store`);
 
@@ -62,7 +58,7 @@ app.use(express.json());
 // Define our Routes
 // Home Route
 app.get("/", (req, res, next) => {
-  res.json({ Welcome: "All!" });
+  res.send(`Welcome world`)
 });
 
 // Route to Get all Snacks
