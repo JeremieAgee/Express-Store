@@ -32,12 +32,12 @@ class Snack {
         }
         this.takeSome = (amount) => {
             let newCount = this.count - amount;
-            if(newCount<0){
+            if (newCount < 0) {
                 console.log(`Can only take ${this.count}`)
-            } else if(newCount==0){
+            } else if (newCount == 0) {
                 this.count = 0;
                 this.instock = false;
-            } else{
+            } else {
                 this.count = newCount;
             }
         }
