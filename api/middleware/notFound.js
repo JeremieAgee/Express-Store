@@ -1,4 +1,4 @@
-const notFound = (request, response, next) => {
+const notFound = (error, request, response, next) => {
     response.status(404).json({
         error:
             "Resource not found. Try again or try different spot",

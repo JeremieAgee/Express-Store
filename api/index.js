@@ -1,7 +1,17 @@
-//Import Express
-const express = require('express')
+// Import Dotenv
+require("dotenv").config();
+
+// Import Express
+const express = require("express");
+
 // Import CORS
 const cors = require("cors");
+
+// Import Axios
+const axios = require("axios");
+
+// import our Supabase instance
+const supabase = require("../supabaseInstance");
 
 const corsOptions = {
   origin: function (origin, callback) {
@@ -22,8 +32,9 @@ They also store all the data from the database without a constant connection
 */
 const Store = require("../utils/Store");
 
-const genericError = require('../middleware/genericError');
-const notFound = require('../middleware/notFound');
+const genericError = require('./middleware/genericError');
+const notFound = require('./middleware/notFound');
+const auth = require('./middleware/auth');
 
 // Intitalize the shop class
 const onlineShop = new Store(`Jeremie's Store`);
@@ -39,9 +50,11 @@ app.use(cors(corsOptions))
 // Use JSON middleware to parse request bodies
 app.use(express.json());
 
+app.use(auth)
+
 // Define our Routes
 // Home Route
-app.get("/", cors(corsOptions), (req, res, next) => {
+app.get("/", (req, res, next) => {
   res.send(`Welcome world`)
 });
 
@@ -68,6 +81,7 @@ app.use(genericError);
 app.use(notFound);
 
 // make the server listen on our port
-app.listen(PORT, () => {
+const server=app.listen(PORT, () => {
   console.log(`The server is running on http://localhost:${PORT}`);
 });
+module.exports = { app, server };
