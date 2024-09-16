@@ -132,7 +132,6 @@ class Store {
                 next(err)
             }
         }
-        this.setStore();
     }
 }
 module.exports = Store;

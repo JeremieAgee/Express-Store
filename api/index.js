@@ -38,8 +38,7 @@ const auth = require('./middleware/auth');
 
 // Intitalize the shop class
 const onlineShop = new Store(`Jeremie's Store`);
-
-
+onlineShop.setStore();
 // define a port
 const PORT = 4000;
 
