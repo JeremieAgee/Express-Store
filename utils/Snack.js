@@ -1,4 +1,3 @@
-const { error } = require("console");
 
 /*Store class that takes 5 parameters
 {int} id: Id of snack
