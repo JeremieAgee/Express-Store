@@ -80,7 +80,15 @@ app.use(genericError);
 app.use(notFound);
 
 // make the server listen on our port
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   console.log(`The server is running on http://localhost:${PORT}`);
 });
-module.exports = { app };
+if (process.env.NODE_ENV === 'development') {
+  const server = app.listen(PORT, () => {
+    console.log(`The server is running on http://localhost:${PORT}`);
+  });
+
+  module.exports = { app, server };
+} else {
+  module.exports = app;
+}
