@@ -17,7 +17,6 @@ class Snack {
         this.catagory = catagory;
         this.inStock = inStock;
         this.count = parseInt(count);
-        
         this.updateSnack = (updatedSnack) => {
             this.name = updatedSnack.name;
             this.description = updatedSnack.description;
@@ -25,23 +24,6 @@ class Snack {
             this.catagory = updatedSnack.catagory;
             this.instock = updatedSnack.instock;
             this.count = parseInt(updatedSnack.count);
-        }
-        this.takeSome = (amount) => {
-            let newCount = this.count - amount;
-            if (newCount < 0) {
-                throw new Error(`Can only take ${this.count}`)
-            } else if (newCount == 0) {
-                this.count = 0;
-                this.instock = false;
-            } else {
-                this.count = newCount;
-            }
-        }
-        this.addMore = (amount) => {
-            if(amount<=0){
-                throw new Error(`Amount can not be less than or equal to 0`)
-            }
-            this.count += amount;
         }
     }
 }
