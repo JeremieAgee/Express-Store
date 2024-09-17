@@ -80,7 +80,7 @@ app.use(genericError);
 app.use(notFound);
 
 // make the server listen on our port
-const server=app.listen(PORT, () => {
+app.listen(PORT, () => {
   console.log(`The server is running on http://localhost:${PORT}`);
 });
-module.exports = { app, server };
+module.exports = { app };
