@@ -7,12 +7,6 @@ const express = require("express");
 // Import CORS
 const cors = require("cors");
 
-// Import Axios
-const axios = require("axios");
-
-// import our Supabase instance
-const supabase = require("../supabaseInstance");
-
 const corsOptions = {
   origin: function (origin, callback) {
     const allowedOrigins = ['http://localhost:3000', 'http://localhost:4000'];
@@ -39,6 +33,7 @@ const auth = require('./middleware/auth');
 // Intitalize the shop class
 const onlineShop = new Store(`Jeremie's Store`);
 onlineShop.setStore();
+
 // define a port
 const PORT = 4000;
 
