@@ -79,10 +79,6 @@ app.use(genericError);
 // 404 Resource not found Error Handling
 app.use(notFound);
 
-// make the server listen on our port
-const server = app.listen(PORT, () => {
-  console.log(`The server is running on http://localhost:${PORT}`);
-});
 if (process.env.NODE_ENV === 'development') {
   const server = app.listen(PORT, () => {
     console.log(`The server is running on http://localhost:${PORT}`);
