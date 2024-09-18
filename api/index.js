@@ -8,17 +8,16 @@ const express = require("express");
 const cors = require("cors");
 
 const corsOptions = {
-  origin: function (origin, callback) {
-    const allowedOrigins = ['http://localhost:3000', 'http://localhost:4000'];
-    if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  }
-};
+  origin: process.env.EXPRESS_STORE_CLIENT,
+  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+}
+
 // create an express application
 const app = express();
+
+app.use(express.json());
+// Use CORS Middleware
+app.use(cors(corsOptions))
 
 /*Import Util Classes
 These classes help maintain project structure.
@@ -38,11 +37,9 @@ onlineShop.setStore();
 const PORT = 4000;
 
 // Define our Middleware
-// Use CORS Middleware
-app.use(cors(corsOptions))
 
 // Use JSON middleware to parse request bodies
-app.use(express.json());
+
 
 app.use(auth)
 
@@ -74,5 +71,8 @@ app.use(genericError);
 // 404 Resource not found Error Handling
 app.use(notFound);
 
+app.listen(PORT, () => {
+  console.log(`The server is running on http://localhost:${PORT}`); 
+});
 
 module.exports = app;
