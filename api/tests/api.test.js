@@ -1,10 +1,13 @@
 // Import Dotenv
 require("dotenv").config();
-//Set NODE_ENV for test
-process.env.NODE_ENV = 'development';
+const app = require("../index");
+const PORT = 4001;
+const server = app.listen(PORT, () => {
+  console.log(`The server is running on http://localhost:${PORT}`); 
+})
 
 const request = require("supertest");
-const { app, server } = require("../index");
+
 describe("Snacks API", () => {
   // Test GET all snacks
 

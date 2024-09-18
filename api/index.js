@@ -74,12 +74,5 @@ app.use(genericError);
 // 404 Resource not found Error Handling
 app.use(notFound);
 
-if (process.env.NODE_ENV === 'development') {
-  const server = app.listen(PORT, () => {
-    console.log(`The server is running on http://localhost:${PORT}`);
-  });
 
-  module.exports = { app, server };
-} else {
-  module.exports = app;
-}
+module.exports = app;
