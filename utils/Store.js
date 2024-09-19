@@ -32,7 +32,7 @@ class Store {
             }
             let attempts = 0;
 
-            while (attempts < this.MAX_RETRIES) {
+            if (attempts < this.MAX_RETRIES) {
                 try {
                     const apiSnacks = await supabase.get("/snacks");
                     const newSnacks = apiSnacks.data.map(snack => new Snack(
