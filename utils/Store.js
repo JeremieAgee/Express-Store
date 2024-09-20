@@ -39,7 +39,7 @@ class Store {
                         snack.name,
                         snack.description,
                         snack.price,
-                        snack.catagory,
+                        snack.category,
                         snack.inStock,
                         snack.count,
                         snack.id));
@@ -76,16 +76,16 @@ class Store {
         this.apiPostSnack = (req, res, next) => {
             try {
                 // destructure our request.body object so we can store the fields in variables
-                const { name, description, price, catagory, inStock, count } = req.body
+                const { name, description, price, category, inStock, count } = req.body
 
                 // error handling if request doesn't send all fields necessary
-                if (!name || !description || !price || !catagory || inStock==null || count==null) {
+                if (!name || !description || !price || !category || inStock==null || count==null) {
                     return res
                         .status(400)
                         .json({ message: "Missing required fields!!" });
                 }
                 //Create snack obj to input into the store and supabase;
-                const newSnack = new Snack( name, description, price, catagory, inStock, count, this.snackCount)
+                const newSnack = new Snack( name, description, price, category, inStock, count, this.snackCount)
                 supabase.post("/snacks", newSnack);
                 this.snacks.push(newSnack)
                 /* send a response of the added data.
@@ -100,18 +100,18 @@ class Store {
         this.apiPutSnack = (req, res, next) => {
             try {
                 // destructure our request.body object so we can store the fields in variables
-                const { name, description, price, catagory, inStock, count } = req.body;
+                const { name, description, price, category, inStock, count } = req.body;
                 const thisId = req.params.id;
 
 
                 // error handling if request doesn't send all fields necessary
-                if (!name || !description || !price || !catagory || inStock==null || count==null) {
+                if (!name || !description || !price || !category || inStock==null || count==null) {
                     return res
                         .status(400)
                         .json({ message: "Missing required fields!!" });
                 } else {
                     const snack = this.findSnack(thisId);
-                    snack.updateSnack({ name: name, description: description , price: price, catagory: catagory, inStock: inStock, count:count });
+                    snack.updateSnack({ name: name, description: description , price: price, category: category, inStock: inStock, count:count });
                     supabase.put("/snacks?id=eq." + thisId, snack);
                     res.json(snack);
                 }

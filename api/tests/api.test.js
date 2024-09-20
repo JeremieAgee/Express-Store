@@ -25,7 +25,7 @@ describe("Snacks API", () => {
       name: "Potato Chips",
       description: "Crispy and salty chips",
       price: 2.5,
-      catagory: "Chips",
+      category: "Chips",
       inStock: true,
       count: 10,
     };
@@ -56,7 +56,7 @@ describe("Snacks API", () => {
       name: "BBQ Chips",
       description: "Smoky and spicy chips",
       price: 2.75,
-      catagory: "Chips",
+      category: "Chips",
       inStock: true,
       count: 20,
     };
