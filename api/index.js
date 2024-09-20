@@ -71,7 +71,7 @@ app.use(genericError);
 app.use(notFound);
 
 app.listen(PORT, () => {
-  console.log(`The server is running on http://localhost:${PORT}`); 
+  console.log(`The server is running on http://localhost:${PORT}`);
 });
 
 module.exports = app;

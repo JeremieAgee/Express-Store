@@ -3,7 +3,7 @@ require("dotenv").config();
 const app = require("../index");
 const PORT = 4001;
 const server = app.listen(PORT, () => {
-  console.log(`The server is running on http://localhost:${PORT}`); 
+  console.log(`The server is running on http://localhost:${PORT}`);
 })
 
 const request = require("supertest");

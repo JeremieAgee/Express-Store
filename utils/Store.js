@@ -25,7 +25,7 @@ class Store {
             this.snacks.push(newItem);
             this.snackCount++;
         }
-    
+
         this.setStore = async () => {
             if (this.set) {
                 return;
@@ -79,13 +79,13 @@ class Store {
                 const { name, description, price, category, inStock, count } = req.body
 
                 // error handling if request doesn't send all fields necessary
-                if (!name || !description || !price || !category || inStock==null || count==null) {
+                if (!name || !description || !price || !category || inStock == null || count == null) {
                     return res
                         .status(400)
                         .json({ message: "Missing required fields!!" });
                 }
                 //Create snack obj to input into the store and supabase;
-                const newSnack = new Snack( name, description, price, category, inStock, count, this.snackCount)
+                const newSnack = new Snack(name, description, price, category, inStock, count, this.snackCount)
                 supabase.post("/snacks", newSnack);
                 this.snacks.push(newSnack)
                 /* send a response of the added data.
@@ -105,22 +105,22 @@ class Store {
 
 
                 // error handling if request doesn't send all fields necessary
-                if (!name || !description || !price || !category || inStock==null || count==null) {
+                if (!name || !description || !price || !category || inStock == null || count == null) {
                     return res
                         .status(400)
                         .json({ message: "Missing required fields!!" });
                 } else {
                     const snack = this.findSnack(thisId);
-                    snack.updateSnack({ name: name, description: description , price: price, category: category, inStock: inStock, count:count });
+                    snack.updateSnack({ name: name, description: description, price: price, category: category, inStock: inStock, count: count });
                     supabase.put("/snacks?id=eq." + thisId, snack);
                     res.json(snack);
                 }
-                
+
             } catch (err) {
                 next(err);
             }
         }
-        
+
         this.apiDeleteSnackById = (req, res, next) => {
             try {
                 //We send a delete request to supabase then remove the snack item from the store

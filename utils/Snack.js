@@ -9,7 +9,7 @@
 {int} count: Amount of the snack in stock
 */
 class Snack {
-    constructor( name='', description='', price='0.00', category='', inStock=false, count=0, id=0) {
+    constructor(name = '', description = '', price = '0.00', category = '', inStock = false, count = 0, id = 0) {
         this.id = parseInt(id);
         this.name = name;
         this.description = description;
