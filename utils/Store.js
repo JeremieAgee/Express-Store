@@ -33,8 +33,8 @@ class Store {
         
             let attempts = 0;
         
-            // Retry loop
-            while (attempts < this.MAX_RETRIES && !this.set) {
+            
+            if (attempts < this.MAX_RETRIES && !this.set) {
                 try {
                     // Fetch snacks from the API
                     const apiSnacks = await supabase.get("/snacks");
