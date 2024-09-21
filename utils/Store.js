@@ -8,7 +8,7 @@ class Store {
         this.snacks = [new Snack('Snack', "testSnack", 1.00, "chip", true, 10, 1)];
         this.snackCount = 0;
         this.set = false;
-        this.MAX_RETRIES = 5;
+        this.MAX_RETRIES = 3;
         this.RETRY_DELAY_MS = 2000;
         this.findSnack = (itemId) => {
             const snack = this.snacks.find(snack => snack.id === parseInt(itemId));
@@ -42,10 +42,12 @@ class Store {
                         snack.category,
                         snack.inStock,
                         snack.count,
-                        snack.id));
+                        snack.id
+                    ));
                     this.snacks = newSnacks;
                     this.snackCount = this.snacks.length > 0 ? this.snacks[this.snacks.length - 1].id + 1 : 1;
                     this.set = true;
+                    console.log(`set`);
                     return; // Exit the function if successful
                 } catch (err) {
                     attempts++;
@@ -68,7 +70,7 @@ class Store {
         this.apiGetSnackById = (req, res, next) => {
             try {
                 const snack = this.findSnack(req.params.id);
-                res.json(snack);
+                res.json(snack);     
             } catch (error) {
                 next(error);
             }
@@ -97,6 +99,7 @@ class Store {
                 next(err);
             }
         }
+
         this.apiPutSnack = (req, res, next) => {
             try {
                 // destructure our request.body object so we can store the fields in variables
