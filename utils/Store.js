@@ -30,11 +30,16 @@ class Store {
             if (this.set) {
                 return;
             }
+        
             let attempts = 0;
-
-            if (attempts < this.MAX_RETRIES) {
+        
+            // Retry loop
+            while (attempts < this.MAX_RETRIES && !this.set) {
                 try {
+                    // Fetch snacks from the API
                     const apiSnacks = await supabase.get("/snacks");
+        
+                    // Map API data to your Snack objects
                     const newSnacks = apiSnacks.data.map(snack => new Snack(
                         snack.name,
                         snack.description,
@@ -44,19 +49,29 @@ class Store {
                         snack.count,
                         snack.id
                     ));
+        
+                    // Update the store with new snacks
                     this.snacks = newSnacks;
                     this.snackCount = this.snacks.length > 0 ? this.snacks[this.snacks.length - 1].id + 1 : 1;
+        
+                    // Mark the store as set
                     this.set = true;
-                    console.log(`set`);
+        
+                    console.log(`Store set successfully on attempt ${attempts + 1}`);
                     return; // Exit the function if successful
+        
                 } catch (err) {
                     attempts++;
                     console.log(`Attempt ${attempts} failed: ${err.message}`);
+        
+                    // Check if max retries have been reached
                     if (attempts >= this.MAX_RETRIES) {
                         console.log(`Failed to set store after ${this.MAX_RETRIES} attempts.`);
                         throw err; // Re-throw the error after max retries
                     }
-                    await new Promise(resolve => setTimeout(resolve, this.RETRY_DELAY_MS)); // Delay before retrying
+        
+                    // Wait for a bit before retrying
+                    await this.delay(this.RETRY_DELAY_MS); 
                 }
             }
         };
