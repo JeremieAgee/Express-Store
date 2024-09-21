@@ -9,67 +9,58 @@ const cors = require("cors");
 
 const corsOptions = {
   origin: process.env.EXPRESS_STORE_CLIENT,
-  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
-}
+  optionsSuccessStatus: 200, // some legacy browsers (IE11, SmartTVs) choke on 204
+};
 
-// create an express application
+// Create an Express application
 const app = express();
 
 app.use(express.json());
 // Use CORS Middleware
-app.use(cors(corsOptions))
+app.use(cors(corsOptions));
 
-/*Import Util Classes
-These classes help maintain project structure.
-They also store all the data from the database without a constant connection
-*/
+// Import Utility Classes
 const Store = require("../utils/Store");
 
+// Import Middleware
 const genericError = require('./middleware/genericError');
 const notFound = require('./middleware/notFound');
 const auth = require('./middleware/auth');
 
-// Intitalize the shop class
+// Initialize the shop class
 const onlineShop = new Store(`Jeremie's Store`);
 
-// define a port
+// Define the port
 const PORT = 4000;
 
-// Define our Middleware
-
-// Use JSON middleware to parse request bodies
-
-
-app.use(auth)
-
-// Define our Routes
-// Home Route
-app.get("/", (req, res, next) => {
-  res.send(`Welcome world`)
+// Define Routes
+app.get("/", (req, res) => {
+  res.send(`Welcome to the store!`);
 });
 
-// Route to Get all Snacks
+// Apply auth middleware only to protected routes
+app.use(auth);
+
+// Route to get all Snacks
 app.get("/snacks", onlineShop.apiGetAllSnacks);
 
 // Route to get a single snack
 app.get("/snacks/:id", onlineShop.apiGetSnackById);
 
-// Route to add a snack
+// Route to add a snack (protected)
 app.post("/snacks", onlineShop.apiPostSnack);
 
-// Route to update a snack
+// Route to update a snack (protected)
 app.put("/snacks/:id", onlineShop.apiPutSnack);
 
-//Route to remove Snack
+// Route to remove a snack (protected)
 app.delete("/snacks/:id", onlineShop.apiDeleteSnackById);
 
-// Error Handling
-// Generic Error Handling
-app.use(genericError);
+// Error Handling Middleware
+app.use(genericError); // Generic error handler
+app.use(notFound); // 404 handler for routes not found
 
-// 404 Resource not found Error Handling
-app.use(notFound);
-
+// Start server
 app.listen(PORT, () => {
   console.log(`The server is running on http://localhost:${PORT}`);
 });
