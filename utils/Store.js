@@ -1,7 +1,9 @@
 // Import our Supabase instance
 const supabase = require("../supabaseInstance");
 const Snack = require("../utils/Snack");
-
+function delay(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
 class Store {
     constructor(name) {
         this.name = name;
@@ -69,9 +71,7 @@ class Store {
                         console.log(`Failed to set store after ${this.MAX_RETRIES} attempts.`);
                         throw err; // Re-throw the error after max retries
                     }
-        
-                    // Wait for a bit before retrying
-                    await this.delay(this.RETRY_DELAY_MS); 
+                    await delay(this.RETRY_DELAY_MS);
                 }
             }
         };
