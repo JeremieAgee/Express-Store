@@ -34,21 +34,26 @@ const onlineShop = new Store(`Jeremie's Store`);
 // Define the port
 const PORT = 4000;
 
+app.use(checkAndSetStore(onlineShop))
 // Define Routes
+
 app.get("/", (req, res) => {
-  res.send(`Welcome to the store!`);
-  
+  //Send store as json obj for frontend to have the data of the store with less api calls
+  res.json(onlineShop);
 });
 
 // Apply auth middleware only to protected routes
 app.use(auth);
 
-app.use(checkAndSetStore(onlineShop))
-// Route to get all Snacks
+/*
+No longer Needed with base fetch  sending the store object
+
+Route to get all Snacks
 app.get("/snacks", onlineShop.apiGetAllSnacks);
 
-// Route to get a single snack
+Route to get a single snack
 app.get("/snacks/:id", onlineShop.apiGetSnackById);
+*/
 
 // Route to add a snack (protected)
 app.post("/snacks", onlineShop.apiPostSnack);

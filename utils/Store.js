@@ -75,27 +75,28 @@ class Store {
 
                 // Update the store with new snacks
                 this.snacks = newSnacks;
-                this.snackCount = this.snacks.length > 0 ? this.snacks[this.snacks.length - 1].id + 1 : 1;
+                this.snackCount = this.snacks.reduce((max, snack) => (snack.id > max ? snack.id : max), this.snacks[0].id) + 1;
 
                 // Mark the store as set
                 this.set = true;
-
-                return; // Exit the function if successful
-
+                console.log("store set")
+                return; 
+                // Exit the function if successful
             } catch (err) {
                 attempts++;
                 console.log(`Attempt ${attempts} failed: ${err.message}`);
 
                 if (attempts >= this.MAX_RETRIES) {
                     console.log(`Failed to set store after ${this.MAX_RETRIES} attempts.`);
-                    throw err; // Re-throw the error after max retries
+                    throw err; 
+                    // Re-throw the error after max retries
                 }
 
                 await delay(this.RETRY_DELAY_MS);
             }
         }
     }
-    //Api request functions that access the intitalized store.
+    /*
     apiGetAllSnacks = (req, res, next) => {
         try {
             res.json(this.snacks);
@@ -103,7 +104,6 @@ class Store {
             next(err);
         }
     };
-
 
     apiGetSnackById = (req, res, next) => {
         try {
@@ -113,7 +113,9 @@ class Store {
             next(error);
         }
     }
-
+    */
+   
+   //Api request functions that access the intitalized store.
     apiPostSnack = (req, res, next) => {
         try {
             // destructure our request.body object so we can store the fields in variables
