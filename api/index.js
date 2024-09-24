@@ -28,21 +28,25 @@ const notFound = require('./middleware/notFound');
 const auth = require('./middleware/auth');
 const checkAndSetStore = require('./middleware/checkAndSetStore');
 
+
 // Initialize the shop class
 const onlineShop = new Store(`Jeremie's Store`);
 
 // Define the port
 const PORT = 4000;
 
+app.use(checkAndSetStore(onlineShop));
+
 // Define Routes
 app.get("/", (req, res) => {
   res.send(`Welcome to the store!`);
+  
 });
 
 // Apply auth middleware only to protected routes
 app.use(auth);
 
-app.use(checkAndSetStore(onlineShop));
+
 // Route to get all Snacks
 app.get("/snacks", onlineShop.apiGetAllSnacks);
 
@@ -63,7 +67,8 @@ app.use(genericError); // Generic error handler
 app.use(notFound); // 404 handler for routes not found
 
 // Start server
-app.listen(PORT, () => {
+app.listen(PORT, async () => {
+  await onlineShop.setStore()
   console.log(`The server is running on http://localhost:${PORT}`);
 });
 

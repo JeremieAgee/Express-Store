@@ -14,36 +14,43 @@ class Store {
         this.set = false;
         this.MAX_RETRIES = 3;
         this.RETRY_DELAY_MS = 2000;
-        this.setStore();
     }
 
-    findSnack(itemId) {
+    findSnack = (itemId) => {
         const snack = this.snacks.find(snack => snack.id === parseInt(itemId));
         if (!snack) throw new Error(`Snack with id ${itemId} not found`);
         return snack;
     }
 
-    removeSnack(itemId) {
+    removeSnack = (itemId) => {
         const snackIndex = this.snacks.findIndex(snack => snack.id === parseInt(itemId));
         if (snackIndex === -1) throw new Error(`Snack with id ${itemId} not found`);
         this.snacks.splice(snackIndex, 1);
     }
 
-    addSnack(newItem) {
+    addSnack = (newItem) => {
         this.snacks.push(newItem);
         this.snackCount++;
     }
 
-    async setStore() {
+    setStore = async () => {
         if (this.set) {
             return;
         }
         let attempts = 0;
 
-        if (attempts < this.MAX_RETRIES && !this.set) {
+        while (attempts < this.MAX_RETRIES && !this.set) {
             try {
-                // Fetch snacks from the API
                 const apiSnacks = await supabase.get("/snacks");
+                
+
+                if (apiSnacks.error) {
+                    throw new Error(apiSnacks.error.message || 'Failed to fetch snacks');
+                }
+
+                if (!apiSnacks.data) {
+                    throw new Error('No data received from Supabase');
+                }
 
                 // Map API data to your Snack objects
                 const newSnacks = apiSnacks.data.map(snack => new Snack(
@@ -63,32 +70,32 @@ class Store {
                 // Mark the store as set
                 this.set = true;
 
-                console.log(`Store set successfully on attempt ${attempts + 1}`);
                 return; // Exit the function if successful
 
             } catch (err) {
                 attempts++;
                 console.log(`Attempt ${attempts} failed: ${err.message}`);
 
-                // Check if max retries have been reached
                 if (attempts >= this.MAX_RETRIES) {
                     console.log(`Failed to set store after ${this.MAX_RETRIES} attempts.`);
                     throw err; // Re-throw the error after max retries
                 }
+
                 await delay(this.RETRY_DELAY_MS);
             }
         }
-    };
-
-    async apiGetAllSnacks(req, res, next) {
+    }
+    apiGetAllSnacks = (req, res, next) => {
         try {
+            console.log(this.snacks);
             res.json(this.snacks);
         } catch (err) {
             next(err);
         }
-    }
+    };
 
-    apiGetSnackById(req, res, next) {
+
+    apiGetSnackById = (req, res, next) => {
         try {
             const snack = this.findSnack(req.params.id);
             res.json(snack);
@@ -97,7 +104,7 @@ class Store {
         }
     }
 
-    apiPostSnack(req, res, next) {
+    apiPostSnack = (req, res, next) => {
         try {
             // destructure our request.body object so we can store the fields in variables
             const { name, description, price, category, inStock, count } = req.body
@@ -122,7 +129,7 @@ class Store {
         }
     }
 
-    apiPutSnack(req, res, next) {
+    apiPutSnack = (req, res, next) => {
         try {
             // destructure our request.body object so we can store the fields in variables
             const { name, description, price, category, inStock, count } = req.body;
@@ -146,7 +153,7 @@ class Store {
         }
     }
 
-    apiDeleteSnackById(req, res, next) {
+    apiDeleteSnackById = (req, res, next) => {
         try {
             //We send a delete request to supabase then remove the snack item from the store
             const thisId = req.params.id;
