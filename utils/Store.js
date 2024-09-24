@@ -9,13 +9,19 @@ function delay(ms) {
 class Store {
     constructor(name) {
         this.name = name;
+        /*
         this.snacks = [new Snack('Snack', "testSnack", 1.00, "chip", true, 10, 1)];
         this.snackCount = 0;
         this.set = false;
         this.MAX_RETRIES = 3;
         this.RETRY_DELAY_MS = 2000;
+        */
     }
-
+    snacks = [new Snack('Snack', "testSnack", 1.00, "chip", true, 10, 1)]
+    snackCount = 0;
+    set = false;
+    MAX_RETRIES = 3;
+    RETRY_DELAY_MS = 2000;
     findSnack = (itemId) => {
         const snack = this.snacks.find(snack => snack.id === parseInt(itemId));
         if (!snack) throw new Error(`Snack with id ${itemId} not found`);
@@ -87,7 +93,6 @@ class Store {
     }
     apiGetAllSnacks = (req, res, next) => {
         try {
-            console.log(this.snacks);
             res.json(this.snacks);
         } catch (err) {
             next(err);
