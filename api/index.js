@@ -35,9 +35,14 @@ const onlineShop = new Store(`Jeremie's Store`);
 const PORT = 4000;
 
 app.use(checkAndSetStore(onlineShop))
-// Define Routes
 
+// Define Routes
 app.get("/", (req, res) => {
+  //Send store as json obj for frontend to have the data of the store with less api calls
+  res.json(`Welcome to my Store ${onlineShop.name}`);
+});
+
+app.get("/store", (req, res) => {
   //Send store as json obj for frontend to have the data of the store with less api calls
   res.json(onlineShop);
 });
