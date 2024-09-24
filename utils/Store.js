@@ -14,8 +14,9 @@ class Store {
         this.set = false;
         this.MAX_RETRIES = 3;
         this.RETRY_DELAY_MS = 2000;
+        this.setStore();
     }
-    
+
     findSnack(itemId) {
         const snack = this.snacks.find(snack => snack.id === parseInt(itemId));
         if (!snack) throw new Error(`Snack with id ${itemId} not found`);
