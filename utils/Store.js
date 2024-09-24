@@ -9,14 +9,17 @@ function delay(ms) {
 class Store {
     constructor(name) {
         this.name = name;
-        /*
+        /* Removed this section out of constructor
+
         this.snacks = [new Snack('Snack', "testSnack", 1.00, "chip", true, 10, 1)];
         this.snackCount = 0;
         this.set = false;
         this.MAX_RETRIES = 3;
         this.RETRY_DELAY_MS = 2000;
+
         */
     }
+    //Section above moved here and removed this keyword
     snacks = [new Snack('Snack', "testSnack", 1.00, "chip", true, 10, 1)]
     snackCount = 0;
     set = false;
@@ -39,6 +42,7 @@ class Store {
         this.snackCount++;
     }
 
+    //Function to call from db for initialization
     setStore = async () => {
         if (this.set) {
             return;
@@ -91,6 +95,7 @@ class Store {
             }
         }
     }
+    //Api request functions that access the intitalized store.
     apiGetAllSnacks = (req, res, next) => {
         try {
             res.json(this.snacks);

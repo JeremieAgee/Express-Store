@@ -1,6 +1,7 @@
 const checkAndSetStore = (onlineShop) => {
     return async (req, res, next) => {
         try {
+            //Check if Store is set.
             if (!onlineShop.set) {
                 await onlineShop.setStore();
             }

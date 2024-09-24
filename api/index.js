@@ -26,16 +26,12 @@ const Store = require("../utils/Store");
 const genericError = require('./middleware/genericError');
 const notFound = require('./middleware/notFound');
 const auth = require('./middleware/auth');
-const checkAndSetStore = require('./middleware/checkAndSetStore');
-
 
 // Initialize the shop class
 const onlineShop = new Store(`Jeremie's Store`);
 
 // Define the port
 const PORT = 4000;
-
-app.use(checkAndSetStore(onlineShop));
 
 // Define Routes
 app.get("/", (req, res) => {
@@ -66,7 +62,7 @@ app.delete("/snacks/:id", onlineShop.apiDeleteSnackById);
 app.use(genericError); // Generic error handler
 app.use(notFound); // 404 handler for routes not found
 
-// Start server
+// Start server and ensure store is set
 app.listen(PORT, async () => {
   await onlineShop.setStore()
   console.log(`The server is running on http://localhost:${PORT}`);
